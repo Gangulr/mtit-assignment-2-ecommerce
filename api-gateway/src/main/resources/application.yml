@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: cart-service-root
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/cart
+              filters:
+                - SetPath=/cart
+
+            - id: cart-service-subpaths
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/cart/**
+              filters:
+                - RewritePath=/api/cart/(?<segment>.*), /cart/$\{segment}
