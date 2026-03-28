@@ -1,0 +1,87 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+
+            # ================= USER SERVICE =================
+            - id: user-service-root
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/users
+              filters:
+                - SetPath=/users
+
+            - id: user-service-subpaths
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/users/**
+              filters:
+                - RewritePath=/api/users/(?<segment>.*), /users/$\{segment}
+
+            # ================= PRODUCT SERVICE =================
+            - id: product-service-root
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/products
+              filters:
+                - SetPath=/products
+
+            - id: product-service-subpaths
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/products/**
+              filters:
+                - RewritePath=/api/products/(?<segment>.*), /products/$\{segment}
+
+            # ================= CART SERVICE =================
+            - id: cart-service-root
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/cart
+              filters:
+                - SetPath=/cart
+
+            - id: cart-service-subpaths
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/cart/**
+              filters:
+                - RewritePath=/api/cart/(?<segment>.*), /cart/$\{segment}
+
+            # ================= ORDER SERVICE =================
+            - id: order-service-root
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/orders
+              filters:
+                - SetPath=/orders
+
+            - id: order-service-subpaths
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/orders/**
+              filters:
+                - RewritePath=/api/orders/(?<segment>.*), /orders/$\{segment}
+
+            # ================= PAYMENT SERVICE =================
+            - id: payment-service-root
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/payments
+              filters:
+                - SetPath=/payments
+
+            - id: payment-service-subpaths
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - RewritePath=/api/payments/(?<segment>.*), /payments/$\{segment}
